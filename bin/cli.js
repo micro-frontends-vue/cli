@@ -41,8 +41,7 @@ program
 program
   .command('serve [entry]')
   .description('启动服务')
-  .option('-s, --script', '指定需要执行的脚本，默认为：npm run serve')
-  .option('-i, --ignore', '忽略启动主项目')
+  .option('--script', '指定需要执行的脚本，默认为：npm run serve')
   .action(() => {
     const argv = minimist(process.argv.slice(3))
     const { _: [entry = '.'], script = 'npm run serve' } = argv
