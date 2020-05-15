@@ -8,7 +8,7 @@ git clone https://github.com/micro-frontends-vue/cli
 
 # 软链接
 cd path/to/cli
-npm run link
+npm link
 
 # 使用
 launch --help
