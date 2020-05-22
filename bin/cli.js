@@ -7,7 +7,9 @@ const didYouMean = require('didyoumean')
 const program = require('commander')
 const semver = require('semver')
 const pkg = require('../package.json')
+
 const { version, engines: { node: requiredVersion } } = pkg
+const cliPath = path.resolve(__dirname, '../')
 
 checkNodeVersion(requiredVersion, '@mfv/cli')
 
@@ -18,7 +20,35 @@ program
     const argv = minimist(process.argv.slice(3))
     const { _: [entry = '.'] } = argv
     logContext(entry)
-    require('../lib/create')(entry)
+    require('../lib/create')(entry, cliPath)
+  })
+
+program
+  .command('exec [script]')
+  .description('执行脚本')
+  // .option('--parallel', '是否并行执行脚本, 默认为串行')
+  .action(() => {
+    const argv = minimist(process.argv.slice(3))
+    const { _: [script], parallel = false } = argv
+    const entry = process.cwd()
+
+    if (!script) {
+      console.log(chalk.red('请输入要执行的脚本'))
+      process.exit(0)
+    }
+
+    logContext(entry)
+    require('../lib/exec')(entry, script, parallel)
+  })
+
+program
+  .command('install')
+  .alias('i')
+  .description('安装依赖')
+  .action(() => {
+    const entry = process.cwd()
+    logContext(entry)
+    require('../lib/exec')(entry, 'npm i')
   })
 
 program
